@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 
 const TABLET_BP = 768
 const DESKTOP_BP = 1024
@@ -12,7 +12,8 @@ export function useBreakpoint() {
     width.value = window.innerWidth
   }
 
-  window.addEventListener('resize', onResize)
+  onMounted(() => window.addEventListener('resize', onResize))
+  onUnmounted(() => window.removeEventListener('resize', onResize))
 
   const breakpoint = computed<BreakpointName>(() => {
     if (width.value >= DESKTOP_BP) return 'desktop'
