@@ -178,9 +178,8 @@ const {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  height: 100%;
-  overflow-y: auto;
   position: relative;
+  padding-bottom: 1em;
 }
 
 .section {

@@ -145,7 +145,6 @@ const {
 
 <style scoped>
 .create-panel {
-  height: 100%;
   display: flex;
   flex-direction: column;
 }
@@ -159,7 +158,6 @@ const {
 .create-layout {
   display: flex;
   gap: 1.5em;
-  height: 100%;
   max-width: 1100px;
   margin: 0 auto;
   width: 100%;

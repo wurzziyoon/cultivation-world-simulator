@@ -179,12 +179,8 @@ const {
 
 <style scoped>
 .save-panel, .load-panel {
-  height: 100%;
   display: flex;
   flex-direction: column;
-}
-
-.save-panel, .load-panel {
   align-items: center;
   padding-top: 2em;
 }
@@ -260,6 +256,7 @@ const {
   max-width: 50em;
   overflow-y: auto;
   flex: 1;
+  padding-bottom: 0.5em;
 }
 
 .save-item {

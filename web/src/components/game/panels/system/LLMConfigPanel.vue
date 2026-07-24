@@ -105,9 +105,7 @@ const {
 
 <style scoped>
 .llm-panel {
-  height: 100%;
-  overflow-y: auto;
-  padding: 0 0.8em;
+  padding: 0 0.8em 1em;
 }
 
 .loading {

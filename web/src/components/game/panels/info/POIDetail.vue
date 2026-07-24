@@ -67,9 +67,8 @@ const goods = computed(() => props.data.grave_goods)
   display: flex;
   flex-direction: column;
   gap: 14px;
-  overflow: auto;
   min-height: 0;
-  padding-right: 4px;
+  padding: 0 4px 1em 0;
 }
 
 .section {

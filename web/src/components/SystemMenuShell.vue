@@ -101,6 +101,7 @@ const tabs = computed((): Array<{ key: SystemMenuTab; label: string; disabled: b
   border-radius: 0.5em;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   box-shadow: 0 0.5em 1.5em rgba(0,0,0,0.5);
 }
 
@@ -203,9 +204,28 @@ const tabs = computed((): Array<{ key: SystemMenuTab; label: string; disabled: b
   border-bottom: 0.15em solid #4a9eff;
 }
 
+/* Mobile: scrollable tab bar */
+@media (max-width: 768px) {
+  .menu-tabs {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    flex-wrap: nowrap;
+  }
+
+  .menu-tabs button {
+    flex: 0 0 auto;
+    white-space: nowrap;
+  }
+
+  .tab-label {
+    font-size: 0.85em;
+  }
+}
+
 .menu-content {
   flex: 1;
-  padding: 1.5em;
+  padding: 1.5em 1.5em 2em;
   overflow-y: auto;
+  min-height: 0;
 }
 </style>

@@ -141,9 +141,9 @@ function handleClick(key: string) {
   border-right: 1px solid rgba(255, 255, 255, 0.1);
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   padding: clamp(32px, 6vh, 72px) clamp(32px, 5vw, 60px);
   box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
 }
 
 .title-area {
@@ -169,6 +169,10 @@ function handleClick(key: string) {
 
 .menu-area {
   width: 100%;
+  flex: 1;
+  overflow-y: auto;
+  min-height: 0;
+  padding-bottom: 1em;
 }
 
 .menu-stack {

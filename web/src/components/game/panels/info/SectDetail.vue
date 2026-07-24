@@ -196,11 +196,11 @@ const {
 
 .content-scroll {
   flex: 1;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 16px;
   padding-right: 4px;
+  padding-bottom: 1em;
 }
 
 .stats-grid {

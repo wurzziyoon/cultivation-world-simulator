@@ -276,7 +276,7 @@ watch(() => uiStore.selectedTarget, (val) => {
 .panel-body {
   flex: 1;
   overflow: hidden;
-  padding: 16px;
+  padding: 16px 16px 24px;
   display: flex;
   flex-direction: column;
   min-height: 0;

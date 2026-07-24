@@ -189,7 +189,7 @@ onUnmounted(() => {
 .info-sheet-body {
   flex: 1;
   overflow-y: auto;
-  padding: 12px 16px 24px;
+  padding: 12px 16px 48px;
   min-height: 0;
 }
 
