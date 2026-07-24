@@ -76,8 +76,22 @@ a {
   background: #666;
 }
 
-/* 修复 Firefox 的滚动条 */
-* {
-  scrollbar-width: thin;
-  scrollbar-color: #444 transparent;
+/* Responsive utilities */
+@media (max-width: 1024px) {
+  /* Hide elements that should only show on desktop */
+  .desktop-only {
+    display: none !important;
+  }
+
+  /* Larger touch targets */
+  .touch-target {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+@media (min-width: 1025px) {
+  .mobile-only {
+    display: none !important;
+  }
 }
