@@ -270,7 +270,7 @@ watch(sidebarWidth, width => {
                   @regionSelected="handleSelection"
                   @poiSelected="handleSelection"
                 />
-                <InfoPanelContainer />
+                <InfoPanelContainer v-if="!isMobile" />
               </div>
               <RoleplayDock />
               <!-- Mobile: FAB button to open event drawer -->
