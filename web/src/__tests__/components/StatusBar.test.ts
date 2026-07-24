@@ -556,7 +556,7 @@ describe('StatusBar', () => {
       expect(dropdownItems[0].text()).toContain('Test Phenomenon')
     })
 
-    it('should hide dropdown when clicking outside (dropdown wrapper click)', async () => {
+    it('should hide dropdown when clicking outside the dropdown area', async () => {
       mockIsMobile.value = true
       const wrapper = mount(StatusBar, globalConfig)
 
@@ -565,8 +565,8 @@ describe('StatusBar', () => {
       await nextTick()
       expect(wrapper.find('.more-dropdown').exists()).toBe(true)
 
-      // Click the dropdown wrapper to close.
-      await wrapper.find('.more-dropdown').trigger('click')
+      // Click the more-widget wrapper (outside the dropdown) to close.
+      await wrapper.find('.more-widget').trigger('click')
       await nextTick()
       expect(wrapper.find('.more-dropdown').exists()).toBe(false)
     })

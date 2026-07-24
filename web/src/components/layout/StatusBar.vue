@@ -74,6 +74,13 @@ function openPanel(panel: StatusBarPanelKey) {
 
 const showMoreMenu = ref(false)
 
+	function handleMoreWidgetClick(e: MouseEvent) {
+	  const dropdown = (e.currentTarget as HTMLElement).querySelector('.more-dropdown')
+	  if (dropdown && !dropdown.contains(e.target as Node)) {
+	    showMoreMenu.value = false
+	  }
+	}
+
 interface MoreMenuItem {
   key: string
   label: string
@@ -205,12 +212,12 @@ const moreMenuItems = computed<MoreMenuItem[]>(() => {
         />
       </template>
 
-      <div v-if="isMobile" class="more-widget">
+      <div v-if="isMobile" class="more-widget" @click="handleMoreWidgetClick">
         <span class="divider">|</span>
-        <span class="widget-trigger more-trigger" @click="showMoreMenu = !showMoreMenu" title="More">
+        <span class="widget-trigger more-trigger" @click.stop="showMoreMenu = !showMoreMenu" title="More">
           <span class="widget-label">⋮</span>
         </span>
-        <div v-if="showMoreMenu" class="more-dropdown" @click="showMoreMenu = false">
+        <div v-if="showMoreMenu" class="more-dropdown" @click.stop>
           <button
             v-for="item in moreMenuItems"
             :key="item.key"
@@ -335,6 +342,9 @@ const moreMenuItems = computed<MoreMenuItem[]>(() => {
   font-size: 20px;
   letter-spacing: 0;
   padding: 0 8px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
 }
 
 .more-dropdown {
@@ -356,7 +366,7 @@ const moreMenuItems = computed<MoreMenuItem[]>(() => {
   align-items: center;
   gap: 8px;
   width: 100%;
-  padding: 8px 12px;
+  padding: 13px 12px;
   background: none;
   border: none;
   color: #eee;
