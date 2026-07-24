@@ -6,7 +6,7 @@ export function useDockResize(
   maxHeight: number,
   isEnabled: () => boolean,
 ) {
-  const dockHeight = ref(initialHeight)
+  const dockHeight = ref(Math.max(minHeight, Math.min(maxHeight, initialHeight)))
   const isResizing = ref(false)
 
   let resizeStartY = 0
