@@ -421,6 +421,13 @@ watch(sidebarWidth, width => {
   outline-offset: 2px;
 }
 
+@media (max-width: 1024px) {
+  .control-btn {
+    width: 48px;
+    height: 48px;
+  }
+}
+
 .pause-indicator {
   position: absolute;
   top: 20px;
