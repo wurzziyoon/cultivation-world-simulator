@@ -343,6 +343,8 @@ const moreMenuItems = computed<MoreMenuItem[]>(() => {
   letter-spacing: 0;
   padding: 0 8px;
   min-height: 44px;
+  min-width: 44px;
+  justify-content: center;
   display: flex;
   align-items: center;
 }
@@ -366,7 +368,8 @@ const moreMenuItems = computed<MoreMenuItem[]>(() => {
   align-items: center;
   gap: 8px;
   width: 100%;
-  padding: 13px 12px;
+  padding: 15px 12px;
+  line-height: 14px;
   background: none;
   border: none;
   color: #eee;
