@@ -253,6 +253,13 @@ onUnmounted(() => {
   padding-top: 6px;
 }
 
+@media (max-width: 1024px) {
+  .roleplay-dock__resize-handle {
+    height: 44px;
+    opacity: 0.3;
+  }
+}
+
 @media (max-width: 900px) {
   .roleplay-dock__main,
   .roleplay-dock__main--conversation {
