@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, ref, onUnmounted } from 'vue'
 import { useUiStore } from '../../stores/ui'
 import { useI18n } from 'vue-i18n'
 import AvatarDetailView from './panels/info/AvatarDetail.vue'
@@ -10,7 +10,6 @@ import xIcon from '@/assets/icons/ui/lucide/x.svg'
 
 const { t } = useI18n()
 const uiStore = useUiStore()
-const sheetRef = ref<HTMLElement | null>(null)
 const startY = ref(0)
 const translateY = ref(0)
 const isDragging = ref(false)
@@ -41,8 +40,8 @@ function close() {
 function onPointerDown(e: PointerEvent) {
   startY.value = e.clientY
   isDragging.value = true
-  document.addEventListener('pointermove', onPointerMove)
-  document.addEventListener('pointerup', onPointerUp)
+  document.addEventListener('pointermove', onPointerMove, { passive: true })
+  document.addEventListener('pointerup', onPointerUp, { passive: true })
 }
 
 function onPointerMove(e: PointerEvent) {
@@ -61,6 +60,11 @@ function onPointerUp() {
     translateY.value = 0
   }
 }
+
+onUnmounted(() => {
+  document.removeEventListener('pointermove', onPointerMove)
+  document.removeEventListener('pointerup', onPointerUp)
+})
 </script>
 
 <template>
@@ -68,7 +72,6 @@ function onPointerUp() {
     <Transition name="sheet">
       <div v-if="open" class="info-sheet-overlay" @click="close">
         <div
-          ref="sheetRef"
           class="info-sheet"
           :style="{ transform: `translateY(${translateY}px)` }"
           @click.stop
@@ -125,7 +128,8 @@ function onPointerUp() {
 .info-sheet-handle {
   display: flex;
   justify-content: center;
-  padding: 8px 0 4px;
+  min-height: 44px;
+  align-items: center;
   cursor: grab;
   touch-action: none;
 }

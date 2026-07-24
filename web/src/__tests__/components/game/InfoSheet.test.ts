@@ -22,7 +22,7 @@ describe('InfoSheet', () => {
     document.body.innerHTML = ''
   })
 
-  it('renders when there is a selected target', () => {
+  it('renders when open is true', () => {
     const wrapper = mount(InfoSheet, {
       props: { open: true },
       global: {
