@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, watch } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { NConfigProvider, darkTheme, NMessageProvider, NDialogProvider } from 'naive-ui'
 import { systemApi } from './api/modules/system'
 import { useI18n } from 'vue-i18n'
@@ -15,6 +15,9 @@ import StatusBar from './components/layout/StatusBar.vue'
 import EventPanel from './components/game/panels/EventPanel.vue'
 import SystemMenu from './components/SystemMenu.vue'
 import LoadingOverlay from './components/LoadingOverlay.vue'
+import EventDrawer from './components/game/EventDrawer.vue'
+import InfoSheet from './components/game/InfoSheet.vue'
+import { useBreakpoint } from './composables/useBreakpoint'
 import menuIcon from '@/assets/icons/ui/lucide/menu.svg'
 import playIcon from '@/assets/icons/ui/lucide/play.svg'
 import pauseIcon from '@/assets/icons/ui/lucide/pause.svg'
@@ -40,6 +43,9 @@ const settingStore = useSettingStore()
 const systemStore = useSystemStore()
 const roleplayStore = useRoleplayStore()
 
+const { isMobile } = useBreakpoint()
+const eventDrawerOpen = ref(false)
+
 function showClosedMessage() {
   document.body.replaceChildren()
   const message = document.createElement('div')
@@ -56,8 +62,10 @@ function showClosedMessage() {
   document.body.appendChild(message)
 }
 
-// Sidebar resizer 状态
-const { sidebarWidth, isResizing, onResizerMouseDown } = useSidebarResize()
+// Sidebar resizer 状态 — only on desktop
+const { sidebarWidth, isResizing, onResizerMouseDown } = !isMobile.value
+  ? useSidebarResize()
+  : { sidebarWidth: ref(0), isResizing: ref(false), onResizerMouseDown: () => {} }
 
 function syncLayoutCssVars(width: number) {
   document.documentElement.style.setProperty('--cws-sidebar-width', `${width}px`)
@@ -265,16 +273,32 @@ watch(sidebarWidth, width => {
                 <InfoPanelContainer />
               </div>
               <RoleplayDock />
+              <!-- Mobile: FAB button to open event drawer -->
+              <button
+                v-if="isMobile"
+                class="event-fab"
+                @click="eventDrawerOpen = true"
+                aria-label="Open events"
+              >
+                <span class="event-fab-icon">📋</span>
+              </button>
             </div>
-            <div
-              class="sidebar-resizer"
-              :class="{ 'is-resizing': isResizing }"
-              @mousedown="onResizerMouseDown"
-            ></div>
-            <aside class="sidebar" :style="{ width: sidebarWidth + 'px' }">
-              <EventPanel />
-            </aside>
+            <!-- Desktop: sidebar resizer + sidebar -->
+            <template v-if="!isMobile">
+              <div
+                class="sidebar-resizer"
+                :class="{ 'is-resizing': isResizing }"
+                @mousedown="onResizerMouseDown"
+              ></div>
+              <aside class="sidebar" :style="{ width: sidebarWidth + 'px' }">
+                <EventPanel />
+              </aside>
+            </template>
           </div>
+
+          <!-- Mobile: EventDrawer + InfoSheet -->
+          <EventDrawer v-if="isMobile" v-model:open="eventDrawerOpen" />
+          <InfoSheet v-if="isMobile" :open="uiStore.selectedTarget !== null" @update:open="uiStore.clearSelection" />
         </div>
 
         <SystemMenu 
@@ -464,5 +488,32 @@ watch(sidebarWidth, width => {
   flex-direction: column;
   z-index: 20;
   flex-shrink: 0;
+}
+
+.event-fab {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid #444;
+  color: #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 30;
+  font-size: 20px;
+}
+
+.event-fab:hover {
+  background: rgba(32, 28, 20, 0.82);
+  border-color: rgba(232, 202, 143, 0.56);
+}
+
+.event-fab:active {
+  transform: scale(0.95);
 }
 </style>
