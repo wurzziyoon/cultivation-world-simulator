@@ -97,7 +97,7 @@ onUnmounted(() => {
       <div
         class="roleplay-dock__resize-handle"
         :class="{ 'is-resizing': isResizing }"
-        @mousedown="startResize"
+        @pointerdown="startResize"
       ></div>
 
       <RoleplayDockHeader

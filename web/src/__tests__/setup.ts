@@ -1,6 +1,16 @@
 import { vi, beforeEach, afterEach } from 'vitest'
 import { createPinia, setActivePinia } from 'pinia'
 
+// jsdom does not provide PointerEvent; polyfill it as a subclass of MouseEvent.
+if (typeof globalThis.PointerEvent === 'undefined') {
+  // @ts-expect-error - minimal polyfill for test environment
+  globalThis.PointerEvent = class PointerEvent extends MouseEvent {
+    constructor(type: string, init?: PointerEventInit) {
+      super(type, init)
+    }
+  }
+}
+
 // Use fake timers globally for consistent async testing.
 vi.useFakeTimers()
 

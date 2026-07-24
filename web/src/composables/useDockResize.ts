@@ -12,7 +12,7 @@ export function useDockResize(
   let resizeStartY = 0
   let resizeStartHeight = 0
 
-  function onResizeMouseMove(e: MouseEvent) {
+  function onResizePointerMove(e: PointerEvent) {
     if (!isResizing.value) return
     const delta = resizeStartY - e.clientY
     dockHeight.value = Math.max(minHeight, Math.min(maxHeight, resizeStartHeight + delta))
@@ -21,18 +21,18 @@ export function useDockResize(
   function stopResize() {
     if (!isResizing.value) return
     isResizing.value = false
-    document.removeEventListener('mousemove', onResizeMouseMove)
-    document.removeEventListener('mouseup', stopResize)
+    document.removeEventListener('pointermove', onResizePointerMove)
+    document.removeEventListener('pointerup', stopResize)
   }
 
-  function startResize(e: MouseEvent) {
+  function startResize(e: PointerEvent) {
     if (!isEnabled()) return
     e.preventDefault()
     resizeStartY = e.clientY
     resizeStartHeight = dockHeight.value
     isResizing.value = true
-    document.addEventListener('mousemove', onResizeMouseMove)
-    document.addEventListener('mouseup', stopResize)
+    document.addEventListener('pointermove', onResizePointerMove, { passive: true })
+    document.addEventListener('pointerup', stopResize, { passive: true })
   }
 
   onUnmounted(() => {

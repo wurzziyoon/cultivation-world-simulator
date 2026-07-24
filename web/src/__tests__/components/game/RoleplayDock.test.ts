@@ -264,16 +264,14 @@ describe('RoleplayDock', () => {
 
     expect((wrapper.element as HTMLElement).style.height).toBe('214px')
 
-    await wrapper.find('.roleplay-dock__resize-handle').trigger('mousedown', {
-      clientY: 300,
-      preventDefault: () => {},
-    })
-    document.dispatchEvent(new MouseEvent('mousemove', { clientY: 250 }))
+    const handle = wrapper.find('.roleplay-dock__resize-handle').element
+    handle.dispatchEvent(new PointerEvent('pointerdown', { clientY: 300, bubbles: true }))
+    document.dispatchEvent(new PointerEvent('pointermove', { clientY: 250 }))
     await nextTick()
 
     expect((wrapper.element as HTMLElement).style.height).toBe('264px')
 
-    document.dispatchEvent(new MouseEvent('mouseup'))
+    document.dispatchEvent(new PointerEvent('pointerup'))
     await nextTick()
 
     wrapper.unmount()
