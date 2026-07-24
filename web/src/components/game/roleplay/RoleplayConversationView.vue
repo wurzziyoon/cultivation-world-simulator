@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { nextTick, onMounted, ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
+import { useBreakpoint } from '@/composables/useBreakpoint'
 
 type ConversationMessage = {
   id: string
@@ -29,6 +30,7 @@ const emit = defineEmits<{
 }>()
 
 const { t } = useI18n()
+const { isMobile } = useBreakpoint()
 
 const chatListRef = ref<HTMLElement | null>(null)
 const inputRef = ref<HTMLTextAreaElement | null>(null)
@@ -118,6 +120,7 @@ onMounted(() => {
         <div v-if="errorText" class="roleplay-dock__error">{{ errorText }}</div>
         <button
           class="roleplay-dock__submit"
+          :class="{ 'roleplay-dock__send-btn--mobile': isMobile }"
           :disabled="isSubmitting || !modelValue.trim()"
           @click="handleSend"
         >
@@ -288,6 +291,13 @@ onMounted(() => {
 @keyframes roleplay-dock-spin {
   to {
     transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 1024px) {
+  .roleplay-dock__send-btn--mobile {
+    min-width: 44px;
+    min-height: 44px;
   }
 }
 </style>
