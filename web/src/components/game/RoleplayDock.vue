@@ -191,6 +191,7 @@ onUnmounted(() => {
 
 .roleplay-dock.is-resizing {
   transition: none;
+  touch-action: none;
 }
 
 .roleplay-dock__resize-handle {
@@ -203,6 +204,7 @@ onUnmounted(() => {
   z-index: 2;
   background: transparent;
   transition: background 0.15s;
+  touch-action: none;
 }
 
 .roleplay-dock__resize-handle.is-resizing,
