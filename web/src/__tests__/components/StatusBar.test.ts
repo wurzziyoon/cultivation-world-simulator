@@ -14,6 +14,9 @@ const { mockGetPhenomenaList, mockChangePhenomenon, mockSuccess, mockError } = v
 const refreshDynastyOverviewMock = vi.hoisted(() => vi.fn())
 const refreshAvatarOverviewMock = vi.hoisted(() => vi.fn())
 
+// Mock ref-like object for useBreakpoint that Vue's template can auto-unwrap.
+const mockIsMobile = vi.hoisted(() => ({ __v_isRef: true, value: false }))
+
 // Mutable store state that can be modified in tests.
 let mockYear = 100
 let mockMonth = 5
@@ -154,6 +157,16 @@ vi.mock('naive-ui', () => ({
   }),
 }))
 
+// Mock useBreakpoint composable.
+vi.mock('@/composables/useBreakpoint', () => ({
+  useBreakpoint: () => ({
+    isMobile: mockIsMobile,
+    isTablet: { __v_isRef: true, value: false },
+    breakpoint: { __v_isRef: true, value: 'desktop' },
+    width: { __v_isRef: true, value: 1200 },
+  }),
+}))
+
 // Stub StatusWidget.
 const StatusWidgetStub = defineComponent({
   name: 'StatusWidget',
@@ -209,6 +222,7 @@ describe('StatusBar', () => {
       realmDistribution: [],
     }
     mockAvatarOverviewLoaded = false
+    mockIsMobile.value = false
 
     // Setup default mock implementations.
     mockGetPhenomenaList.mockImplementation(() => Promise.resolve())
@@ -509,5 +523,52 @@ describe('StatusBar', () => {
     await nextTick()
 
     expect(refreshAvatarOverviewMock).toHaveBeenCalled()
+  })
+
+  describe('mobile', () => {
+    it('should collapse widgets into a more dropdown on mobile', () => {
+      mockIsMobile.value = true
+      const wrapper = mount(StatusBar, globalConfig)
+
+      // Only the time widget should be rendered as a StatusWidget stub on mobile.
+      const widgets = wrapper.findAll('.status-widget-stub')
+      expect(widgets.length).toBe(1)
+      expect(widgets[0].attributes('data-label')).toBe('100common.year5common.month')
+
+      // The more trigger should be visible.
+      expect(wrapper.find('.more-trigger').exists()).toBe(true)
+    })
+
+    it('should show more dropdown items when trigger is clicked', async () => {
+      mockIsMobile.value = true
+      const wrapper = mount(StatusBar, globalConfig)
+
+      // Click the more trigger.
+      await wrapper.find('.more-trigger').trigger('click')
+      await nextTick()
+
+      // The dropdown should be visible.
+      expect(wrapper.find('.more-dropdown').exists()).toBe(true)
+
+      // Should contain the phenomenon item (since currentPhenomenon is set) and other items.
+      const dropdownItems = wrapper.findAll('.more-dropdown-item')
+      expect(dropdownItems.length).toBe(10) // phenomenon + 9 other widgets
+      expect(dropdownItems[0].text()).toContain('Test Phenomenon')
+    })
+
+    it('should hide dropdown when clicking outside (dropdown wrapper click)', async () => {
+      mockIsMobile.value = true
+      const wrapper = mount(StatusBar, globalConfig)
+
+      // Open the dropdown.
+      await wrapper.find('.more-trigger').trigger('click')
+      await nextTick()
+      expect(wrapper.find('.more-dropdown').exists()).toBe(true)
+
+      // Click the dropdown wrapper to close.
+      await wrapper.find('.more-dropdown').trigger('click')
+      await nextTick()
+      expect(wrapper.find('.more-dropdown').exists()).toBe(false)
+    })
   })
 })
